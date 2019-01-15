@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Удалить блюдо{% endblock %}
+{% block content %}
+    <h4>Вы уверены что хотите удалить блюдо {{ food.name }}?</h4>
+    <form action="{% url 'webapp:food_delete' food.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Блюда{% endblock %}
+{% block menu %}
+    <li class="nav_item"><a href="{% url 'webapp:food_create' %}" class="nav-link">Добавить блюдо</a></li>
+    <li class="nav_item"><a href="{% url 'webapp:order_list' %}" class="nav-link">Список заказов</a></li>
+    {% if perms.webapp.add_order %}
+        <li class="nav_item"><a href="{% url 'webapp:order_create' %}" class="nav-link">Создать заказ</a></li>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% for food in food_list %}
+        <div class="card-group mx-auto col-md-6 text-center m-3">
+            <div class="card">
+                <img class="card-img-top" src="{{ food.photo.url }}" alt="Картинка с блюдом">
+                <div class="card-body">
+                    <h5 class="card-title">{{ food.name }} - {{ food.price }} сом</h5>
+                    <p class="card-text">{{ food.description }}</p>
+                    <p class="card-text"><a href="{% url 'webapp:food_update' food.pk %}">Изменить блюдо</a></p>
+                    <p class="card-text"><a href="{% url 'webapp:food_delete' food.pk %}">Удалить блюдо</a></p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

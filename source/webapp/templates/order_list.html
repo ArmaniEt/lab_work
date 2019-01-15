@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Заказы{% endblock %}
+{% block menu %}
+    <li class="nav_item"><a href="{% url 'webapp:order_create' %}" class="nav-link">Создать заказ</a></li>
+{% endblock %}
+{% block content %}
+    <h2>Список заказов: </h2>
+    {% for order in order_list %}
+        <div class="list-group">
+             <a class="list-group-item list-group-item-action" href="{% url 'webapp:order_detail' order.pk %}">{{ order.contact_name }} {{ order.delivery_address }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}

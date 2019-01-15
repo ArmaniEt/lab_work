@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Добавить блюдо{% endblock %}
+{% block content %}
+    <h2>Добавить блюдо: </h2>
+     <form action="{% url 'webapp:food_create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+           <p>{{ field.label_tag }}</p> <p>{{ field }}</p><br>
+        {% endfor %}
+        <div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+    </form>
+{% endblock %}

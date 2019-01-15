@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Заказы{% endblock %}
+{% block menu %}
+    <li class="nav_item"><a href="{% url 'webapp:order_create' %}" class="nav-link">Создать заказ</a></li>
+    <li class="nav_item"><a href="{% url 'webapp:order_list' %}" class="nav-link">Список заказов</a></li>
+{% endblock %}
+{% block content %}
+    <ul class="list-group">
+        {% if order.status == 'delivered' %}
+            <li class="list-group-item m-2">
+                Заказ {{ order.contact_name }} {{ order.delivery_address }} доставляется или доставлен
+            </li>
+        {% else %}
+            <li class="list-group-item"><p>Имя заказчика: {{ order.contact_name }}</p>
+                <p>Адрес заказчика: {{ order.delivery_address }}</p>
+                <p>Статус: {{ order.get_status_display }}</p>
+                {% for food in order.order_foods.all  %}
+                    <p>Блюдо №: {{ food.pk }}</p>
+                    <p>Блюдо: {{ food.food.name }}</p>
+                    <p>Кол-во: {{ food.amount }}</p>
+                    {% if perms.webapp.change_orderfoods %}
+                        <p><a href="{% url 'webapp:order_update' food.pk %}">Изменить блюдо {{ food.pk }}</a></p>
+                        <p><a href="{% url 'webapp:order_delete_food' food.pk %}">Удалить блюдо {{ food.pk }}</a></p>
+                    {% endif %}
+                {% endfor %}
+                {% if perms.webapp.delete_order %}
+                    <a href="{% url 'webapp:canceled_order' order.pk %}">Отменить заказ</a><br>
+                {% endif %}
+                {% if perms.webapp.add_orderfoods %}
+                    <a href="{% url 'webapp:order_food_create' order.pk %}">Добавить блюдо</a><br>
+                {% endif %}
+                {% if perms.webapp.change_order %}
+                    <p class="text-right"><a href="{% url 'webapp:order_data_update' order.pk %}">Изменить данные заказа</a></p>
+                {% endif %}
+                {% if order.status == 'preparing' and perms.webapp.view_food %}
+                    <p><a href="{% url 'webapp:delivery_order' order.pk %}">Взять заказ</a></p>
+                {% elif order.status == 'on_way' and perms.webapp.view_food and order.courier == request.user %}
+                    <p><a href="{% url 'webapp:delivery_order' order.pk %}">Доставить заказ</a></p>
+                {% endif %}
+            </li>
+        {% endif %}
+    </ul>
+{% endblock %}
+
