@@ -2,7 +2,8 @@ from django.urls import path
 
 from webapp.views import FoodListView, FoodCreateView, FoodUpdateView, FoodDeleteView, \
     OrderCreateView, OrderListView, OrderUpdateView, OrderDataUpdateView, \
-    delete_view, canceled_view, delivery_view, OrderCreateFoodView, OrderDetailView
+    delete_view, canceled_view, delivery_view, OrderDetailView, OrderFoodAjaxCreateView, \
+    OrderFoodAjaxUpdateView, OrderFoodAjaxDeleteView
 
 
 from django.conf.urls.static import static
@@ -22,14 +23,15 @@ urlpatterns = [
     path('order/<int:pk>/view', OrderDetailView.as_view(), name='order_detail'),
 
 
-    path('order/<int:pk>', OrderUpdateView.as_view(), name='order_update'),
+    path('order/<int:pk>/update_food', OrderFoodAjaxUpdateView.as_view(), name='order_ajax_update'),
     path('order/<int:pk>/data/update', OrderDataUpdateView.as_view(), name='order_data_update'),
-    path('order/food/<int:food_pk>/delete', delete_view, name='order_delete_food'),
+    path('order/food/<int:pk>/delete', OrderFoodAjaxDeleteView.as_view(), name='order_delete_food'),
 
 
     path('order/<int:order_pk>/cancel', canceled_view, name='canceled_order'),
     path('order/<int:order_pk>/delivery', delivery_view, name='delivery_order'),
-    path('order/<int:pk>/create_food', OrderCreateFoodView.as_view(), name='order_food_create'),
+    path('order/<int:pk>/create_food', OrderFoodAjaxCreateView.as_view(), name='order_food_create'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
