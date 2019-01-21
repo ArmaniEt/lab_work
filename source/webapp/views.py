@@ -176,9 +176,10 @@ class OrderFoodAjaxDeleteView(LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         delete_food = get_object_or_404(OrderFoods, pk=self.kwargs.get('pk'))
-        print(delete_food)
+        pk = delete_food.pk
+        delete_food.delete()
         return JsonResponse({
-            'pk': delete_food.pk
+            'pk': pk
         })
 
     def get(self, *args, **kwargs):

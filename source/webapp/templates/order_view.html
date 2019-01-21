@@ -20,7 +20,7 @@
                     {% for food in order.order_foods.all %}
                         <li id="order_food_{{ food.pk }}" class="list-group-item"> <!-- add pk for li --->
                             <span id="order_food_name_{{ food.pk }}" data-food_pk="{{ food.food.pk }}">{{ food.food.name }}</span>:
-                            <span id="order_food_amount_{{ food.pk }}">{{ food.amount }} шт.</span>
+                            <span id="order_food_amount_{{ food.pk }}">{{ food.amount }}</span> <span>шт</span>
                             {% if perms.webapp.change_orderfoods %}
                                 <a class="edit_link" data-pk="{{ food.pk }}" href="{% url 'webapp:order_ajax_update' food.pk %}">Изменить блюдо</a> /
                                 <a class="delete_link" data-pk="{{ food.food.pk }}" href="{% url 'webapp:order_delete_food' food.pk %}">Удалить блюдо</a>
@@ -129,8 +129,8 @@
             let pk = response['pk'];
             let foodNameSpan = $('#order_food_name_' + pk);
             foodNameSpan.text(response.food_name);
-            foodNameSpan.data('food_pk', response.food_pk); // ask from teacher what does this string do
-            $("#order_food_amount_ " + pk).text(response.amount);
+            foodNameSpan.data('food_pk', response.food_pk);
+            $('#order_food_amount_' + pk).text(response['amount']);
 
             $('#modal_for_food').modal('hide');
         }
@@ -200,7 +200,6 @@
             let foodPk = $(this).data('pk');
             let foodName = $('#order_food_name_' + foodPk);
             let foodAmount = $("#order_food_amount_" + foodPk);
-
             $("#id_food").val(foodName.data('food_pk'));
             $('#id_amount').val(foodAmount.text());
 
